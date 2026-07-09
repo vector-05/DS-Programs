@@ -53,12 +53,11 @@ void tr(int matrix[100][100], int rows, int cols, int tr_matrix[100][100]) { // 
 	}
 }
 
-int main() {
+void main() {
 	
 	// Assignment 1
 	// C program to compute following on matrix: addition; subtraction; multiplication; transpose
 	
-
 	int a_row, a_col, b_row, b_col;
 
 	// Matrix Info - User Input	
@@ -134,6 +133,4 @@ int main() {
 			display(b_tr, b_col, b_row);
 		break;
 	}
-	
-	return 0;
 }
