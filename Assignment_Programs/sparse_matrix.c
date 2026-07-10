@@ -24,7 +24,7 @@ void compaction(int matrix[100][100], int rows, int cols, int compact[100][3]) {
     int t = 0;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            if (!(matrix[i][j] != 0)){
+            if (matrix[i][j] != 0){
                 compact[t+1][0] = i;
                 compact[t+1][1] = j;
                 compact[t+1][2] = matrix[i][j];
@@ -39,9 +39,10 @@ void compaction(int matrix[100][100], int rows, int cols, int compact[100][3]) {
     compact[0][2] = t;
 
     // compact form print
-    for (int i = 0; i < t; i++) {
+    printf("Compact Matrix: \n");
+    for (int i = 0; i <= t; i++) {
 		for (int j = 0; j < 3; j++) {
-			printf("%d ", matrix[i][j]);
+			printf("%d ", compact[i][j]);
 		}
 		printf("\n");
 	}
@@ -62,10 +63,10 @@ int main() {
 
     int matrix[rows][cols];
 
-    printf("Enter elements of Sparse Matrix: ");
+    printf("Enter elements of Sparse Matrix: \n");
     input(matrix, rows, cols);
 
-    printf("Entered Sparse Matrix: ");
+    printf("Entered Sparse Matrix: \n");
     display(matrix, rows, cols);
 
     // compact form
