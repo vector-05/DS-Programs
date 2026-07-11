@@ -18,6 +18,7 @@ void free_memory(int **matrix, int rows) {
 
 void input(int **matrix, int rows, int cols) { // Matrix Input Func
 	for (int i = 0; i < rows; i++) {
+		printf("[Data] ")	// automation tag
 		for (int j = 0; j < cols; j++) {
 			printf("Enter element [%d][%d]: ", i, j);
 			scanf("%d", &matrix[i][j]);
@@ -27,6 +28,7 @@ void input(int **matrix, int rows, int cols) { // Matrix Input Func
 
 void display(int **matrix, int rows, int cols) { // Matrix Display Func
 	for (int i = 0; i < rows; i++) {
+		printf("[Data] ")	// automation tag
 		for (int j = 0; j < cols; j++) {
 			printf("%d ", matrix[i][j]);
 		}
@@ -112,7 +114,7 @@ int main() {
 	switch (choice) {
 		case 1: // Addition
 			if ( !(a_row == b_row) || !(a_col == b_col) ) {
-				printf("--! Matrix Incompatible !--");
+				printf("[MESSAGE] --! Matrix Incompatible !--");
 			} else {
 				int **c = allocate_memory(a_row, a_col);
 				add(a, b, c, a_row, a_col);
@@ -124,7 +126,7 @@ int main() {
 
 		case 2: // Subtraction
 			if ( !(a_row == b_row) || !(a_col == b_col) ) {
-				printf("--! Matrix Incompatible !--\n");
+				printf("[MESSAGE] --! Matrix Incompatible !--\n");
 			} else {
 				int **c = allocate_memory(a_row, a_col);
 				sub(a, b, c, a_row, a_col);
@@ -136,7 +138,7 @@ int main() {
 
 		case 3: // Multiplication
 			if (!(a_row == b_col)) {
-				printf("--! Matrix Incompatible !--\n");
+				printf("[MESSAGE] --! Matrix Incompatible !--\n");
 			}else {
 				int **c = allocate_memory(a_row, a_col);
 				mul(a, a_row, a_col, b, b_col, c);

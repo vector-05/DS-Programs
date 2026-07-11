@@ -9,16 +9,11 @@ if compile_result.returncode != 0:
     print(compile_result.stderr)
     exit(1)
 
-test_input_1 = """2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n1"""
-test_input_2 = """2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n2"""
-test_input_3 = """2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n3"""
-test_input_4 = """2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n4"""
-
 test_inputs = {
-    "Test 1: Addition": test_input_1, 
-    "Test 2: Subtraction": test_input_2, 
-    "Test 3: Multiplication": test_input_3, 
-    "Test 4: transpose": test_input_4
+    "Test 1: Addition":         "2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n1", 
+    "Test 2: Subtraction":      "2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n2", 
+    "Test 3: Multiplication":   "2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n3", 
+    "Test 4: transpose":        "2\n2\n2\n2\n1\n2\n3\n4\n1\n2\n3\n4\n4"
 }
 
 # 3. Loop through each test case dynamically
