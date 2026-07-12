@@ -1,0 +1,14 @@
+Tags for classifying I/O in script automated testing
+[INPUT]
+[DATA]
+[MESSAGE]
+
+Sample Automated Input 
+"
+Ar(2) Ac(2)
+Br(2) Bc(2)
+1 2
+3 4
+1 2
+3 4
+"

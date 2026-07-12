@@ -18,22 +18,21 @@ void free_memory(int **matrix, int rows) {
 
 void input(int **matrix, int rows, int cols) { // Matrix Input Func
 	for (int i = 0; i < rows; i++) {
-		printf("[Data] ")	// automation tag
+		printf("[INPUT] ");	// automation tag
 		for (int j = 0; j < cols; j++) {
-			printf("Enter element [%d][%d]: ", i, j);
 			scanf("%d", &matrix[i][j]);
 		}
 	}
 }
 
-void display(int **matrix, int rows, int cols) { // Matrix Display Func
-	for (int i = 0; i < rows; i++) {
-		printf("[Data] ")	// automation tag
-		for (int j = 0; j < cols; j++) {
-			printf("%d ", matrix[i][j]);
-		}
-		printf("\n");
-	}
+void display(int **matrix, int rows, int cols, const char* prefix) { // Matrix Display
+    for (int i = 0; i < rows; i++) {
+        printf("%s ", prefix); // Prints the tag you passed in
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 void add(int **a, int **b, int **c, int c_rows, int c_cols) { // Matrix Addition Func
@@ -75,74 +74,71 @@ int main() {
 	
 	// Assignment 1
 	// C program to compute following on matrix: addition; subtraction; multiplication; transpose
-	
-	int a_row, a_col, b_row, b_col;
 
 	// Matrix Info - User Input	
-	printf("Enter rows of A Matrix: ");
-	scanf("%d", &a_row);
-	printf("Enter cols of A Matrix: ");
-	scanf("%d", &a_col);
-	printf("Enter rows of B Matrix: ");
-	scanf("%d", &b_row);
-	printf("Enter cols of B Matrix: ");
-	scanf("%d", &b_col);
+
+	int a_row, a_col, b_row, b_col;
+	printf("[MESSAGE] Enter Matrix A Size: [Ar Ac]\n");
+	scanf("%d %d", &a_row, &a_col);
+	printf("[MESSAGE] Enter Matrix B Size: [Br Bc]\n");
+	scanf("%d %d", &b_row, &b_col);
 	
 	int **a = allocate_memory(a_row, a_col); // Matrix Declaration
-	int **b = allocate_memory(b_row, b_col);
+	int **b = allocate_memory(b_row, b_col); // Matrix Declaration
 
 	// Matrix Input
-	printf("Enter elements of A matrix\n"); 
+	printf("[MESSAGE] Enter elements of A matrix\n"); 
 	input(a, a_row, a_col);
-	printf("Enter elements of B matrix\n"); 
+	printf("[MESSAGE] Enter elements of B matrix\n"); 
 	input(b, b_row, b_col);
 	
 	// Matrix Display
-	printf("Elements of A matrix\n"); 
-	display(a, a_row, a_col);
-	printf("Elements of B matrix\n"); 
-	display(b, b_row, b_col);
+	printf("[MESSAGE] Elements of A matrix\n"); 
+	display(a, a_row, a_col, "[MESSAGE]");
+	printf("[MESSAGE] Elements of B matrix\n"); 
+	display(b, b_row, b_col, "[MESSAGE]");
 	
 
 	// Menu Driven Program
 	int choice;
 	
-	printf("Functions to perform: \n (1) Addition \n (2) Subtraction \n (3) Multiplication \n (4) Transpose \n"); 
-	printf("Enter your choice: ");
+	printf("[MESSAGE] Functions to perform: \n[MESSAGE] (1) Addition \n[MESSAGE] (2) Subtraction \n[MESSAGE] (3) Multiplication \n[MESSAGE] (4) Transpose \n"); 
+	printf("[MESSAGE] Enter your choice: \n");
 	scanf("%d", &choice);
 
 	switch (choice) {
 		case 1: // Addition
 			if ( !(a_row == b_row) || !(a_col == b_col) ) {
-				printf("[MESSAGE] --! Matrix Incompatible !--");
+				printf("[DATA] Matrix Incompatible\n");
 			} else {
 				int **c = allocate_memory(a_row, a_col);
 				add(a, b, c, a_row, a_col);
-				printf("Addition: \n");
-				display(c, a_row, a_col);
+				printf("[MESSAGE] Addition: \n");
+				display(c, a_row, a_col, "[DATA]");
 				free_memory(c, a_row);
 			}	
 		break;
 
 		case 2: // Subtraction
 			if ( !(a_row == b_row) || !(a_col == b_col) ) {
-				printf("[MESSAGE] --! Matrix Incompatible !--\n");
+				printf("[DATA] Matrix Incompatible\n");
 			} else {
 				int **c = allocate_memory(a_row, a_col);
 				sub(a, b, c, a_row, a_col);
-				printf("Subtraction: \n");
-				display(c, a_row, a_col);
+				printf("[MESSAGE] Subtraction: \n");
+				display(c, a_row, a_col, "[DATA]");
 				free_memory(c, a_row);
 			}
 		break;
 
 		case 3: // Multiplication
 			if (!(a_row == b_col)) {
-				printf("[MESSAGE] --! Matrix Incompatible !--\n");
+				printf("[DATA] Matrix Incompatible\n");
 			}else {
 				int **c = allocate_memory(a_row, a_col);
 				mul(a, a_row, a_col, b, b_col, c);
-				display(c, a_row, b_col);
+				printf("[MESSAGE] Multiplication: \n");
+				display(c, a_row, b_col, "[DATA]");
 				free_memory(c, a_row);
 			}
 		break;
@@ -151,19 +147,19 @@ int main() {
 			int **a_tr = allocate_memory(a_col, a_row);
 			int **b_tr = allocate_memory(b_col, b_row);
 
-			printf("Transpose of A:\n");
+			printf("[MESSAGE] Transpose of A:\n");
 			tr(a, a_row, a_col, a_tr);
-			display(a_tr, a_col, a_row);
+			display(a_tr, a_col, a_row, "[DATA]");
 
-			printf("transpose of B:\n");
+			printf("[MESSAGE] Transpose of B:\n");
 			tr(b, b_row, b_col, b_tr);
-			display(b_tr, b_col, b_row);
+			display(b_tr, b_col, b_row, "[DATA]");
 
 			free_memory(a_tr, a_row);
 			free_memory(b_tr, b_row);
 		break;
 	}
 
-	printf("--! End !--\n");
+	printf("[MESSAGE] End\n");
 	return 0;
 }
