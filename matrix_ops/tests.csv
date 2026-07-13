@@ -1,0 +1,892 @@
+test_id,test_name,input_stream,expected_output
+1,Basic Addition,"2 2
+2 2
+1 2
+3 4
+1 2
+3 4
+1","2 4
+6 8"
+2,Basic Subtraction,"2 2
+2 2
+1 2
+3 4
+1 2
+3 4
+2","0 0
+0 0"
+3,Zero Matrix Identity (Add),"2 2
+2 2
+5 6
+7 8
+0 0
+0 0
+1","5 6
+7 8"
+4,Zero Matrix Identity (Sub),"2 2
+2 2
+5 6
+7 8
+0 0
+0 0
+2","5 6
+7 8"
+5,Subtract from Zero Matrix,"2 2
+2 2
+0 0
+0 0
+1 2
+3 4
+2","-1 -2
+-3 -4"
+6,Add Large Values,"2 2
+2 2
+1000 2000
+3000 4000
+500 500
+500 500
+1","1500 2500
+3500 4500"
+7,Subtraction resulting in Negatives,"2 2
+2 2
+1 1
+1 1
+5 5
+5 5
+2","-4 -4
+-4 -4"
+8,Mixed Sign Addition,"2 2
+2 2
+-1 2
+-3 4
+1 -2
+3 -4
+1","0 0
+0 0"
+9,Addition of Rectangular Matrices,"2 3
+2 3
+1 1 1
+2 2 2
+3 3 3
+4 4 4
+1","4 4 4
+6 6 6"
+10,Subtraction of Rectangular Matrices,"3 2
+3 2
+5 5
+5 5
+5 5
+1 2
+3 4
+5 6
+2","4 3
+2 1
+0 -1"
+11,Square Matrix Multiplication,"2 2
+2 2
+1 2
+3 4
+1 2
+3 4
+3","7 10
+15 22"
+12,Multiply by Zero Matrix,"2 2
+2 2
+1 2
+3 4
+0 0
+0 0
+3","0 0
+0 0"
+13,Multiply by Identity Matrix,"2 2
+2 2
+4 5
+6 7
+1 0
+0 1
+3","4 5
+6 7"
+14,Rectangular Multiplication (2x3 by 3x2),"2 3
+3 2
+1 2 3
+4 5 6
+7 8
+9 10
+11 12
+3","58 64
+139 154"
+15,Rectangular Multiplication (3x2 by 2x3),"3 2
+2 3
+1 2
+3 4
+5 6
+1 2 3
+4 5 6
+3","9 12 15
+19 26 33
+29 40 51"
+16,Column Vector times Row Vector (Inner Product),"1 3
+3 1
+2 3 4
+5
+6
+7
+3",56
+17,Row Vector times Column Vector (Outer Product),"3 1
+1 3
+2
+3
+4
+5 6 7
+3","10 12 14
+15 18 21
+20 24 28"
+18,Multiplication with Negative Elements,"2 2
+2 2
+-1 2
+3 -4
+5 -6
+-7 8
+3","-19 22
+43 -50"
+19,Multiplication Scalar-like Single Elements,"1 1
+1 1
+6
+7
+3",42
+20,Large Product Computations,"2 2
+2 2
+100 200
+300 400
+5 2
+1 3
+3","700 800
+1900 1800"
+21,Transpose Square Matrices,"2 2
+2 2
+1 2
+3 4
+5 6
+7 8
+4","1 3
+2 4
+5 7
+6 8"
+22,Transpose Rectangular A and B (Wide),"2 3
+2 3
+1 2 3
+4 5 6
+7 8 9
+1 2 3
+4","1 4
+2 5
+3 6
+7 1
+8 2
+9 3"
+23,Transpose Rectangular A and B (Tall),"3 2
+3 2
+1 2
+3 4
+5 6
+7 8
+9 0
+1 2
+4","1 3 5
+2 4 6
+7 9 1
+8 0 2"
+24,Transpose Symmetric Matrix (Should match input),"2 2
+2 2
+1 5
+5 2
+9 3
+3 9
+4","1 5
+5 2
+9 3
+3 9"
+25,Transpose Row Vector to Column,"1 4
+1 4
+1 2 3 4
+5 6 7 8
+4","1
+2
+3
+4
+5
+6
+7
+8"
+26,Transpose Column Vector to Row,"4 1
+4 1
+1
+2
+3
+4
+5
+6
+7
+8
+4","1 2 3 4
+5 6 7 8"
+27,Transpose Single Element Matrices,"1 1
+1 1
+99
+11
+4","99
+11"
+28,Smallest Valid Size (1x1 Operations - Add),"1 1
+1 1
+5
+10
+1",15
+29,Smallest Valid Size (1x1 Operations - Sub),"1 1
+1 1
+5
+10
+2",-5
+30,Smallest Valid Size (1x1 Operations - Mul),"1 1
+1 1
+5
+10
+3",50
+31,Highly Symmetric Data Pattern Multiplications,"3 3
+3 3
+1 1 1
+1 1 1
+1 1 1
+1 1 1
+1 1 1
+1 1 1
+3","3 3 3
+3 3 3
+3 3 3"
+32,Asymmetric Dimensions Matrix Multiplication,"1 4
+4 2
+1 2 3 4
+1 2
+3 4
+5 6
+7 8
+3","50 60"
+33,Non-Square Flat Row Alternating Signs,"1 5
+1 5
+1 -1 1 -1 1
+2 -2 2 -2 2
+1","3 -3 3 -3 3"
+34,4x4 Large Dimension Addition,"4 4
+4 4
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+2 2 2 2
+2 2 2 2
+2 2 2 2
+2 2 2 2
+1","3 3 3 3
+3 3 3 3
+3 3 3 3
+3 3 3 3"
+35,4x4 Large Dimension Subtraction,"4 4
+4 4
+3 3 3 3
+3 3 3 3
+3 3 3 3
+3 3 3 3
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+2","2 2 2 2
+2 2 2 2
+2 2 2 2
+2 2 2 2"
+36,4x1 Column Vector Subtraction,"4 1
+4 1
+1
+2
+3
+4
+4
+3
+2
+1
+2","-3
+-1
+1
+3"
+37,Incompatible Addition (Row Mismatch),"2 2
+3 2
+1 2
+3 4
+1 2
+3 4
+5 6
+1",Matrix Incompatible
+38,Incompatible Addition (Col Mismatch),"2 2
+2 3
+1 2
+3 4
+1 2 3
+4 5 6
+1",Matrix Incompatible
+39,Incompatible Subtraction (Row Mismatch),"3 2
+2 2
+1 2
+3 4
+5 6
+1 2
+3 4
+2",Matrix Incompatible
+40,Incompatible Subtraction (Col Mismatch),"2 3
+2 2
+1 2 3
+4 5 6
+1 2
+3 4
+2",Matrix Incompatible
+41,Incompatible Multiplication (Inner Dim Mismatch),"2 3
+2 3
+1 2 3
+4 5 6
+1 2 3
+4 5 6
+3",Matrix Incompatible
+42,Incompatible Multiplication Vector Boundary,"1 4
+1 4
+1 2 3 4
+5 6 7 8
+3",Matrix Incompatible
+43,Incompatible Subtraction Deep Mismatch,"1 1
+4 4
+5
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+2",Matrix Incompatible
+44,Incompatible Addition Swapped Shapes,"4 2
+2 4
+1 1
+1 1
+1 1
+1 1
+2 2 2 2
+2 2 2 2
+1",Matrix Incompatible
+45,Incompatible Multiplication Swapped Shapes,"4 1
+4 1
+1
+1
+1
+1
+2
+2
+2
+2
+3",Matrix Incompatible
+46,Row Count Extreme Incompatibility,"1 2
+5 2
+1 2
+1 2
+1 2
+1 2
+1 2
+1 2
+1",Matrix Incompatible
+47,Column Count Extreme Incompatibility,"2 1
+2 5
+1
+2
+1 2 3 4 5
+6 7 8 9 0
+1",Matrix Incompatible
+48,Addition Identity Check Matrix Shape,"3 1
+1 3
+1
+2
+3
+1 2 3
+1",Matrix Incompatible
+49,Vector Multiplication Structural Orientation Mismatch,"4 1
+4 1
+1
+2
+3
+4
+5
+6
+7
+8
+3",Matrix Incompatible
+50,Non-Matching Multiplications Dimensions Check,"3 2
+4 3
+1 2
+3 4
+5 6
+1 2 3
+4 5 6
+7 8 9
+0 1 2
+3",Matrix Incompatible
+51,Nilpotent Matrix Multiplication (A^2 = 0),"2 2
+2 2
+0 1
+0 0
+0 1
+0 0
+3","0 0
+0 0"
+52,Idempotent Matrix Multiplication (A^2 = A),"2 2
+2 2
+1 0
+0 0
+1 0
+0 0
+3","1 0
+0 0"
+53,Involutory Matrix Multiplication (A^2 = I),"2 2
+2 2
+0 1
+1 0
+0 1
+1 0
+3","1 0
+0 1"
+54,Orthogonal Vector Multiplication (Product = 0),"1 3
+3 1
+1 -2 1
+2
+1
+0
+3",0
+55,Skew-Symmetric Matrix Transpose,"3 3
+3 3
+0 1 -2
+-1 0 3
+2 -3 0
+0 1 -2
+-1 0 3
+2 -3 0
+4","0 -1 2
+1 0 -3
+-2 3 0
+0 -1 2
+1 0 -3
+-2 3 0"
+56,Identity Matrix Multiplication (Alternative Sizes),"3 3
+3 3
+1 2 3
+4 5 6
+7 8 9
+1 0 0
+0 1 0
+0 0 1
+3","1 2 3
+4 5 6
+7 8 9"
+57,Zero Matrix Multiplication Absorption Property,"3 3
+3 3
+0 0 0
+0 0 0
+0 0 0
+9 8 7
+6 5 4
+3 2 1
+3","0 0 0
+0 0 0
+0 0 0"
+58,Repeated Identity Matrix Addition,"2 2
+2 2
+1 0
+0 1
+1 0
+0 1
+1","2 0
+0 2"
+59,Matrix Self-Subtraction (Yields Zero),"3 3
+3 3
+14 15 16
+17 18 19
+20 21 22
+14 15 16
+17 18 19
+20 21 22
+2","0 0 0
+0 0 0
+0 0 0"
+60,Double Negative Addition Logic,"2 2
+2 2
+-5 -10
+-15 -20
+-5 -10
+-15 -20
+1","-10 -20
+-30 -40"
+61,Alternating Row Sign Subtraction,"2 2
+2 2
+1 -1
+1 -1
+-1 1
+-1 1
+2","2 -2
+2 -2"
+62,Single Row Scalar Vector Scaling Addition,"1 4
+1 4
+10 20 30 40
+1 2 3 4
+1","11 22 33 44"
+63,Diagonal Matrix Multiplication Extraction,"3 3
+3 3
+2 0 0
+0 3 0
+0 0 4
+1 2 3
+4 5 6
+7 8 9
+3","2 4 6
+12 15 18
+28 32 36"
+64,Non-Commutative Multiplication Verification (A*B != B*A),"2 2
+2 2
+1 2
+3 4
+2 0
+1 2
+3","4 4
+10 8"
+65,Permutation Matrix Swap Row Execution,"2 2
+2 2
+0 1
+1 0
+5 6
+7 8
+3","7 8
+5 6"
+66,Subtraction of Inverse Sign Matrix,"2 2
+2 2
+4 4
+4 4
+-4 -4
+-4 -4
+2","8 8
+8 8"
+67,Multiplication completely populated by Negative Ones,"2 2
+2 2
+-1 -1
+-1 -1
+-1 -1
+-1 -1
+3","2 2
+2 2"
+68,Multiplicative Signs Cancellation Cascade,"2 2
+2 2
+-1 2
+-3 4
+-5 -6
+7 -8
+3","19 -10
+43 -14"
+69,Mixed Elements Single Value Zero-Crossing (Sub),"1 1
+1 1
+-5
+-12
+2",7"
+70,Asymmetric Sign Column Matrix Addition,"3 1
+3 1
+-1
+2
+-3
+1
+-2
+3
+1","0
+0
+0"
+71,Checkerboard Pattern Matrix Addition,"3 3
+3 3
+1 -1 1
+-1 1 -1
+1 -1 1
+-1 1 -1
+1 -1 1
+-1 1 -1
+1","0 0 0
+0 0 0
+0 0 0"
+72,Checkerboard Pattern Matrix Subtraction,"3 3
+3 3
+1 -1 1
+-1 1 -1
+1 -1 1
+1 -1 1
+-1 1 -1
+1 -1 1
+2","0 0 0
+0 0 0
+0 0 0"
+73,Highly Negative Elements Rectangular Multiplication,"2 3
+3 2
+-1 -2 -3
+-4 -5 -6
+-1 -2
+-3 -4
+-5 -6
+3","22 28
+49 64"
+74,Flat Matrix Subtraction Drop to Negative Value,"1 5
+1 5
+0 0 0 0 0
+5 10 15 20 25
+2","-5 -10 -15 -20 -25"
+75,Large Single Digits Multiplication Verification,"1 1
+1 1
+-9
+-9
+3",81
+76,Multi-Row Horizontal Strip Addition,"1 6
+1 6
+1 1 1 1 1 1
+2 2 2 2 2 2
+1","3 3 3 3 3 3"
+77,Multi-Row Horizontal Strip Subtraction,"1 6
+1 6
+5 5 5 5 5 5
+2 2 2 2 2 2
+2","3 3 3 3 3 3"
+78,Multi-Column Vertical Long Strip Addition,"6 1
+6 1
+2
+2
+2
+2
+2
+2
+3
+3
+3
+3
+3
+3
+1","5
+5
+5
+5
+5
+5"
+79,Multi-Column Vertical Long Strip Subtraction,"6 1
+6 1
+10
+10
+10
+10
+10
+10
+4
+4
+4
+4
+4
+4
+2","6
+6
+6
+6
+6
+6"
+80,Multi-Column Vertical Long Strip Transpose,"5 1
+5 1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+0
+4","1 2 3 4 5
+6 7 8 9 0"
+81,High Aspect Ratio Multiplication (1x5 by 5x1),"1 5
+5 1
+1 2 3 4 5
+5
+4
+3
+2
+1
+3",35
+82,High Aspect Ratio Multiplication (5x1 by 1x5),"5 1
+1 5
+1
+2
+3
+4
+5
+2 2 2 2 2
+3","2 2 2 2 2
+4 4 4 4 4
+6 6 6 6 6
+8 8 8 8 8
+10 10 10 10 10"
+83,Asymmetric Rectangular Addition Structure,"3 4
+3 4
+1 1 1 1
+2 2 2 2
+3 3 3 3
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1","2 2 2 2
+3 3 3 3
+4 4 4 4"
+84,Asymmetric Rectangular Subtraction Structure,"4 3
+4 3
+5 5 5
+5 5 5
+5 5 5
+5 5 5
+1 2 3
+1 2 3
+1 2 3
+1 2 3
+2","4 3 2
+4 3 2
+4 3 2
+4 3 2"
+85,Interlocking Non-Square Rectangular Shapes Multiplication,"3 4
+4 2
+1 0 1 0
+0 1 0 1
+1 1 1 1
+2 1
+3 2
+4 3
+5 4
+3","6 4
+8 6
+14 10"
+86,Comp-Exception: Radical Square Matrix Addition Mismatch,"2 2
+3 3
+1 2
+3 4
+1 2 3
+4 5 6
+7 8 9
+1",Matrix Incompatible
+87,Comp-Exception: Radical Square Matrix Subtraction Mismatch,"3 3
+2 2
+1 2 3
+4 5 6
+7 8 9
+1 2
+3 4
+2",Matrix Incompatible
+88,Comp-Exception: Addition Transposed Shapes Error Flow,"2 5
+5 2
+1 1 1 1 1
+1 1 1 1 1
+2 2
+2 2
+2 2
+2 2
+2 2
+1",Matrix Incompatible
+89,Comp-Exception: Subtraction Transposed Shapes Error Flow,"5 2
+2 5
+2 2
+2 2
+2 2
+2 2
+2 2
+1 1 1 1 1
+1 1 1 1 1
+2",Matrix Incompatible
+90,Comp-Exception: Empty Structural Mismatch Multiplication Inner Gap,"3 1
+3 1
+1
+2
+3
+4
+5
+6
+3",Matrix Incompatible
+91,Comp-Exception: Multiplication Wide-Wide Outer Boundary Clash,"1 4
+1 4
+1 2 3 4
+5 6 7 8
+3",Matrix Incompatible
+92,Comp-Exception: Multiplication Tall-Tall Side Border Clash,"4 1
+4 1
+1
+2
+3
+4
+5
+6
+7
+8
+3",Matrix Incompatible
+93,Comp-Exception: Complex Asymmetric Rectangular Multiplicative Failure,"4 3
+2 4
+1 2 3
+4 5 6
+7 8 9
+1 2 3
+1 2 3 4
+5 6 7 8
+3",Matrix Incompatible
+94,Comp-Exception: Row Dominated Grid Addition Clash,"5 2
+1 2
+1 2
+1 2
+1 2
+1 2
+1 2
+1 2
+1",Matrix Incompatible
+95,Comp-Exception: Column Dominated Grid Subtraction Clash,"2 5
+2 1
+1 2 3 4 5
+6 7 8 9 0
+1
+2
+2",Matrix Incompatible
+96,Comp-Exception: 1x1 to 2x2 Scaling Vector Space Mismatch (Add),"1 1
+2 2
+5
+1 2
+3 4
+1",Matrix Incompatible
+97,Comp-Exception: 1x1 to 2x2 Scaling Vector Space Mismatch (Sub),"2 2
+1 1
+1 2
+3 4
+5
+2",Matrix Incompatible
+98,Comp-Exception: 1x1 to 2x2 Scaling Vector Space Mismatch (Mul),"1 1
+2 2
+5
+1 2
+3 4
+3",Matrix Incompatible
+99,Comp-Exception: Extreme Sizing Matrix Addition Overflow Incompatibility,"1 4
+4 1
+1 2 3 4
+1
+2
+3
+4
+1",Matrix Incompatible
+100,Comp-Exception: Complex Intertwined Dimensions Structural Drop,"3 2
+2 1
+1 2
+3 4
+5 6
+1
+2
+1",Matrix Incompatible
+EOF
