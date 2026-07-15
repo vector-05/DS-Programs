@@ -106,7 +106,7 @@ void fast_transpose(int **compact, int **transpose) { // simple transpose of spa
 }
 
 int main() {
-    // Transform sparse matrix into compact form <rows, cols, non-zero elements>
+    // Transpose of Sparse Matrix using Fast Transpose
 
     // Matrix input & display
     int rows, cols;
