@@ -5,7 +5,7 @@ import pandas as pd
 
 # 1. Compile the C code once before running the test cases
 print("Compiling matrix.c...")
-compile_result = subprocess.run(["gcc", "matrix_ops.c", "-o", "matrix_ops"], capture_output=True, text=True)
+compile_result = subprocess.run(["gcc", "matrix_ops.c", "-o", "run"], capture_output=True, text=True)
 
 if compile_result.returncode != 0:
     print("❌ Compilation Failed!")
@@ -45,7 +45,7 @@ for index, row in df_tests.iterrows():
     
     # Run the program with the current input stream
     result = subprocess.run(
-        ["./matrix_ops"], 
+        ["./run"], 
         input=input_stream, 
         text=True, 
         capture_output=True

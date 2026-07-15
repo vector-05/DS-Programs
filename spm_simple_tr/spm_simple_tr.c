@@ -54,7 +54,37 @@ void compaction(int **matrix, int rows, int cols, int **compact) { // Sparse Mat
     compact[0][2] = t;
 
     // compact form print
+    printf("Compact Form:\n");
     display(compact, t+1, 3);
+}
+
+void simple_transpose(int **compact, int **transpose) { // simple transpose of sparse matrix
+
+    // matrix info
+    int non_zero_elements = compact[0][2];
+    int rows = compact[0][0];
+    int cols = compact[0][1];
+
+    transpose[0][0] = cols;
+    transpose[0][1] = rows;
+    transpose[0][2] = non_zero_elements;
+
+    int k = 1; // transpose array new row pointer
+
+    for (int i = 0; i < cols; i++) {
+        for (int j = 1; j <= non_zero_elements; j++) {
+            if ( i == compact[j][1]) {
+                transpose[k][0] = compact[j][1];
+                transpose[k][1] = compact[j][0];
+                transpose[k][2] = compact[j][2];
+                k++;
+            }
+        }
+    }
+
+    // display transpose matrix
+    printf("Simple Transpose: \n");
+    display(transpose, non_zero_elements + 1, 3);
 }
 
 int main() {
@@ -79,9 +109,14 @@ int main() {
     int **compact = allocate_memory(max_rows, 3);
     compaction(matrix, rows, cols, compact);
 
+    // simple transpose of compact form
+    int **transpose = allocate_memory(max_rows, 3);
+    simple_transpose(compact, transpose);
+
     // Free allocated memory
     free_memory(matrix, rows);
     free_memory(compact, max_rows);
+    free_memory(transpose, max_rows);
 
     return 0;
 }
