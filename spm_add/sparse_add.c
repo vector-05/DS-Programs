@@ -52,9 +52,6 @@ void compaction(int **matrix, int rows, int cols, int **compact) { // Sparse Mat
     compact[0][0] = rows;
     compact[0][1] = cols;
     compact[0][2] = t;
-
-    // compact form print
-    display(compact, t+1, 3);
 }
 
 int addition(int **a, int **b) {    // Addition of sparse matrix (modified with flag operation)
@@ -68,10 +65,12 @@ int addition(int **a, int **b) {    // Addition of sparse matrix (modified with 
             return -1;
         } else {
             // pointer variables
-            int i = j = k = 1;
+            int i = 1;
+            int j = 1; 
+            int k = 1;
             
             // result matrix
-            int **c = allocate_memory(a[0][0], a[0][1]);
+            int **c = allocate_memory(t1 + t2 + 1, 3); // allocate max possible rows
             c[0][0] = a[0][0];
             c[0][1] = a[0][1];
 
@@ -79,10 +78,10 @@ int addition(int **a, int **b) {    // Addition of sparse matrix (modified with 
             while ( (i <= t1) && (j <= t2) ) {
                 int row_compare = (a[i][0] > b[j][0]) - (a[i][0] < b[j][0]); // row condition
                 switch (row_compare) {
-                    case 0: 
+                    case 0: {
                         int col_compare = (a[i][1] > b[j][1]) - (a[i][1] < b[j][1]);    // col condition
                         switch (col_compare) {
-                            case 0: 
+                            case 0: {
                                 if (!((a[i][2] + b[j][2]) == 0)) {
                                     c[k][0] = a[i][0];
                                     c[k][1] = a[i][1];
@@ -91,45 +90,66 @@ int addition(int **a, int **b) {    // Addition of sparse matrix (modified with 
                                 }
                                 i++;
                                 j++;
-                                break;
-                            case 1: 
+                                break; }
+                            case 1: {
                                 c[k][0] = b[j][0];
                                 c[k][1] = b[j][1];
                                 c[k][2] = b[j][2];
                                 k++;
                                 j++;
-                                break;
-                            case -1: 
+                                break; }
+                            case -1: {
                                 c[k][0] = a[i][0];
                                 c[k][1] = a[i][1];
                                 c[k][2] = a[i][2];
                                 k++;
                                 i++;
-                                break;
-                            default: return -1;
+                                break; }
+                            default: {return -1;}
                         }
-                        break;
-                    case 1: 
+                        break; }
+                    case 1: {
                         c[k][0] = b[j][0];
                         c[k][1] = b[j][1];
                         c[k][2] = b[j][2];
                         k++;
                         j++;
-                        break;
-                    case -1:
+                        break; }
+                    case -1: {
                         c[k][0] = a[i][0];
                         c[k][1] = a[i][1];
                         c[k][2] = a[i][2];
                         k++;
                         i++;
-                        break;
-                    default: return -1;
+                        break; }
+                    default: {return -1;}
                 }
             }
 
-            // complete the rest of the code
+            while (i <= t1) {   // copy for remaining elements if Matrix B finished first
+                c[k][0] = a[i][0];
+                c[k][1] = a[i][1];
+                c[k][2] = a[i][2];
+                i++;
+                k++;
+            }
 
-            free_memory(c, a[0][0]);
+            while (j <= t2) {   // copy for remaining elements if Matrix A finished first
+                c[k][0] = b[j][0];
+                c[k][1] = b[j][1];
+                c[k][2] = b[j][2];
+                j++;
+                k++;
+            }
+
+            // total non zero elements in addition matrix
+            c[0][2] = k - 1;
+
+            printf("Addition Result:\n");
+            display(c, c[0][2] + 1, 3);
+
+            free_memory(c, t1 + t2 + 1);
+            return 0;
         }
 
     } else {
@@ -170,7 +190,10 @@ int main() {
     compaction(b, b_row, b_col, b_compact);
 
     // Addition
-    flag = addition(a, b);
+    int flag = addition(a_compact, b_compact);
+    if (flag == -1) {
+        printf("Error");
+    }
 
     // Free allocated memory
     free_memory(a, a_row);
