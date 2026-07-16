@@ -54,6 +54,7 @@ void compaction(int **matrix, int rows, int cols, int **compact) { // Sparse Mat
     compact[0][2] = t;
 
     // compact form print
+    printf("Compact Form: \n");
     display(compact, t+1, 3);
 }
 
