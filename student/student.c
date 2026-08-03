@@ -78,8 +78,65 @@ int binary_search(int n, int key) {
 
 // Sorting Algorithms
 
-int insertion_sort(int A[20], int n) {
-	return 0;
+// insertion sort
+void insertion_sort(struct student A[], int n) {
+    for (int i = 1; i < n; i++) {
+        struct student key = A[i]; 
+        int j = i - 1;
+
+        while (j >= 0 && A[j].rollno > key.rollno) {
+            A[j + 1] = A[j];       
+            j = j - 1;
+        }
+        
+        A[j + 1] = key;  
+    }
+}
+
+// selection sort
+void selection_sort(struct student A[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+
+        for (int j = i + 1; j < n; j++) {
+            if (A[j].rollno < A[minIndex].rollno) {
+                minIndex = j;
+            }
+        }
+
+        if (minIndex != i) {
+            struct student temp = A[i];
+            A[i] = A[minIndex];
+            A[minIndex] = temp;
+        }
+    }
+}
+
+// shell sort
+void shell_sort(struct student A[], int n) {
+    if (n <= 1) return; 
+        int gap = n / 2;
+        do {
+            int i = gap;
+            do {
+                struct student temp = A[i];
+                int j = i;
+
+                if (j >= gap && A[j - gap].rollno > temp.rollno) {
+                    do {
+                        A[j] = A[j - gap];
+                        j -= gap;
+                    } while (j >= gap && A[j - gap].rollno > temp.rollno);
+                }
+
+                A[j] = temp;
+                i++;
+
+            } while (i < n);
+
+            gap /= 2;
+
+        } while (gap > 0);
 }
 
 // menu program
@@ -113,12 +170,19 @@ int main() {
     printf("Select Action to Perform\n");
     printf("[1] Linear Search\n");
     printf("[2] Binary Search\n");
+    printf("[3] Insertion Sort\n");
+    printf("[4] Selection Sort\n");
+    printf("[5] Shell Sort\n");
+    printf("[6] Display Records\n");
     printf("[0] Exit\n");
     
     int ch;
     printf("Enter choice: ");
     scanf(" %d", &ch);
     
+    // sorted flag
+    int is_sorted = 0;
+
     switch (ch) {
     
     case 1: {
@@ -158,7 +222,53 @@ int main() {
     		}
     	break;
     	}
-    	
+    
+    case 3: {
+        // insertion sort
+        if (is_sorted == 1) {
+            printf("List Already Sorted...\n");
+            break;
+        } else {
+            insertion_sort(students, n);
+            printf("List has been sorted...\n");
+            is_sorted = 1;
+            break;
+        }
+    }
+    
+    case 4: {
+        // selection sort
+        if (is_sorted == 1) {
+            printf("List Already Sorted...\n");
+            break;
+        } else {
+            selection_sort(students, n);
+            printf("List has been sorted...\n");
+            is_sorted = 1;
+            break;
+        }
+    }
+    
+    case 5: {
+        // shell sort
+        if (is_sorted == 1) {
+            printf("List Already Sorted...\n");
+            break;
+        } else {
+            shell_sort(students, n);
+            printf("List has been sorted...\n");
+            is_sorted = 1;
+            break;
+        }
+    }
+
+    case 6: {
+        // display records
+        printf("Displaying Records...\n");
+        display(n);
+        break;
+    }
+
     case 0: {
 	    // exit
 	    return 0;
