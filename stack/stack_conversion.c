@@ -75,7 +75,7 @@ int main() {
         printf("Running Operation...\n");
         switch (option) {
             case 0: {
-                printf("Exiting System");
+                printf("Exiting System\n");
                 exit(0);
                 break;
             }
