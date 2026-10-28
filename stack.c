@@ -1,23 +1,34 @@
+
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+
 #define MAX 256
 
-typedef struct {
-    char data[MAX][MAX];
-    int top;
-} Stack;
+// Stack for storing expressions
+char stack[MAX][MAX];
+int top = -1;
 
-void initStack(Stack *s) { s->top = -1; }
-int empty(Stack *s) { return s->top == -1; }
-void push(Stack *s, const char *value) {
-    if (s->top < MAX - 1) strcpy(s->data[++s->top], value);
+void push(char value[]) {
+    strcpy(stack[++top], value);
 }
-void pop(Stack *s, char *value) {
-    if (empty(s)) value[0] = '\0';
-    else strcpy(value, s->data[s->top--]);
+
+void pop(char value[]) {
+    strcpy(value, stack[top--]);
 }
-int isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^'; }
+
+// Check whether character is an operand
+int isOperand(char c) {
+    return (c >= 'A' && c <= 'Z') ||
+           (c >= 'a' && c <= 'z') ||
+           (c >= '0' && c <= '9');
+}
+
+// Check whether character is an operator
+int isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' ||
+           c == '/' || c == '%' || c == '^';
+}
+
 int precedence(char c) {
     if (c == '^') return 3;
     if (c == '*' || c == '/' || c == '%') return 2;
@@ -25,145 +36,229 @@ int precedence(char c) {
     return 0;
 }
 
-void infixToPostfix(const char *in, char *out, int reverseMode) {
-    char ops[MAX];
-    int top = -1, i, k = 0;
-    for (i = 0; in[i]; i++) {
+// Stack for operators during infix conversion
+char ops[MAX];
+int otop = -1;
+
+void pushOp(char c) {
+    ops[++otop] = c;
+}
+
+char popOp() {
+    return ops[otop--];
+}
+
+// Infix to Postfix
+void infixToPostfix(char in[], char out[], int reverseMode) {
+    int k = 0;
+    otop = -1;
+
+    for (int i = 0; in[i] != '\0'; i++) {
         char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-        if (isalnum((unsigned char)c)) out[k++] = c;
-        else if (c == '(') ops[++top] = c;
+
+        if (isOperand(c)) {
+            out[k++] = c;
+        }
+        else if (c == '(') {
+            pushOp(c);
+        }
         else if (c == ')') {
-            while (top >= 0 && ops[top] != '(') out[k++] = ops[top--];
-            if (top >= 0) top--;
-        } else if (isOperator(c)) {
-            while (top >= 0 && isOperator(ops[top]) &&
-                   (reverseMode ? precedence(ops[top]) > precedence(c) : precedence(ops[top]) > precedence(c) ||
-                    (precedence(ops[top]) == precedence(c) && c != '^')))
-                out[k++] = ops[top--];
-            ops[++top] = c;
+            while (otop >= 0 && ops[otop] != '(')
+                out[k++] = popOp();
+
+            if (otop >= 0)
+                popOp();
+        }
+        else if (isOperator(c)) {
+            while (otop >= 0 && isOperator(ops[otop]) &&
+                  (precedence(ops[otop]) > precedence(c) ||
+                  (precedence(ops[otop]) == precedence(c) &&
+                   (reverseMode ? c == '^' : c != '^')))) {
+                out[k++] = popOp();
+            }
+
+            pushOp(c);
         }
     }
-    while (top >= 0) {
-        if (ops[top] != '(') out[k++] = ops[top];
-        top--;
-    }
+
+    while (otop >= 0)
+        out[k++] = popOp();
+
     out[k] = '\0';
 }
 
-void reverseAndSwap(const char *src, char *dst) {
-    int i, n = (int)strlen(src);
-    for (i = 0; i < n; i++) {
-        char c = src[n - 1 - i];
+// Reverse expression and swap brackets
+void reverse(char in[], char out[]) {
+    int n = strlen(in);
+
+    for (int i = 0; i < n; i++) {
+        char c = in[n - 1 - i];
+
         if (c == '(') c = ')';
         else if (c == ')') c = '(';
-        dst[i] = c;
+
+        out[i] = c;
     }
-    dst[n] = '\0';
+
+    out[n] = '\0';
 }
 
-void infixToPrefix(const char *in, char *out) {
-    char reversed[MAX], post[MAX];
-    reverseAndSwap(in, reversed);
-    infixToPostfix(reversed, post, 1);
-    reverseAndSwap(post, out);
+// Infix to Prefix
+void infixToPrefix(char in[], char out[]) {
+    char rev[MAX], post[MAX];
+
+    reverse(in, rev);
+    infixToPostfix(rev, post, 1);
+    reverse(post, out);
 }
 
-void postfixToInfix(const char *in, char *out) {
-    Stack s;
+// Postfix to Infix
+void postfixToInfix(char in[], char out[]) {
     char a[MAX], b[MAX], temp[MAX];
-    int i;
-    initStack(&s);
-    for (i = 0; in[i]; i++) {
+    top = -1;
+
+    for (int i = 0; in[i] != '\0'; i++) {
         char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-        if (isalnum((unsigned char)c)) {
-            temp[0] = c; temp[1] = '\0'; push(&s, temp);
-        } else if (isOperator(c)) {
-            pop(&s, b); pop(&s, a);
-            snprintf(temp, sizeof(temp), "(%s%c%s)", a, c, b);
-            push(&s, temp);
+
+        if (isOperand(c)) {
+            temp[0] = c;
+            temp[1] = '\0';
+            push(temp);
+        }
+        else if (isOperator(c)) {
+            pop(b);
+            pop(a);
+
+            sprintf(temp, "(%s%c%s)", a, c, b);
+            push(temp);
         }
     }
-    pop(&s, out);
+
+    pop(out);
 }
 
-void prefixToInfix(const char *in, char *out) {
-    Stack s;
+// Prefix to Infix
+void prefixToInfix(char in[], char out[]) {
     char a[MAX], b[MAX], temp[MAX];
-    int i;
-    initStack(&s);
-    for (i = (int)strlen(in) - 1; i >= 0; i--) {
+    top = -1;
+
+    for (int i = strlen(in) - 1; i >= 0; i--) {
         char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-        if (isalnum((unsigned char)c)) {
-            temp[0] = c; temp[1] = '\0'; push(&s, temp);
-        } else if (isOperator(c)) {
-            pop(&s, a); pop(&s, b);
-            snprintf(temp, sizeof(temp), "(%s%c%s)", a, c, b);
-            push(&s, temp);
+
+        if (isOperand(c)) {
+            temp[0] = c;
+            temp[1] = '\0';
+            push(temp);
+        }
+        else if (isOperator(c)) {
+            pop(a);
+            pop(b);
+
+            sprintf(temp, "(%s%c%s)", a, c, b);
+            push(temp);
         }
     }
-    pop(&s, out);
+
+    pop(out);
 }
 
-void prefixToPostfix(const char *in, char *out) {
-    Stack s;
+// Prefix to Postfix
+void prefixToPostfix(char in[], char out[]) {
     char a[MAX], b[MAX], temp[MAX];
-    int i;
-    initStack(&s);
-    for (i = (int)strlen(in) - 1; i >= 0; i--) {
+    top = -1;
+
+    for (int i = strlen(in) - 1; i >= 0; i--) {
         char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-        if (isalnum((unsigned char)c)) {
-            temp[0] = c; temp[1] = '\0'; push(&s, temp);
-        } else if (isOperator(c)) {
-            pop(&s, a); pop(&s, b);
-            snprintf(temp, sizeof(temp), "%s%s%c", a, b, c);
-            push(&s, temp);
+
+        if (isOperand(c)) {
+            temp[0] = c;
+            temp[1] = '\0';
+            push(temp);
+        }
+        else if (isOperator(c)) {
+            pop(a);
+            pop(b);
+
+            sprintf(temp, "%s%s%c", a, b, c);
+            push(temp);
         }
     }
-    pop(&s, out);
+
+    pop(out);
 }
 
-void postfixToPrefix(const char *in, char *out) {
-    Stack s;
+// Postfix to Prefix
+void postfixToPrefix(char in[], char out[]) {
     char a[MAX], b[MAX], temp[MAX];
-    int i;
-    initStack(&s);
-    for (i = 0; in[i]; i++) {
+    top = -1;
+
+    for (int i = 0; in[i] != '\0'; i++) {
         char c = in[i];
-        if (isspace((unsigned char)c)) continue;
-        if (isalnum((unsigned char)c)) {
-            temp[0] = c; temp[1] = '\0'; push(&s, temp);
-        } else if (isOperator(c)) {
-            pop(&s, b); pop(&s, a);
-            snprintf(temp, sizeof(temp), "%c%s%s", c, a, b);
-            push(&s, temp);
+
+        if (isOperand(c)) {
+            temp[0] = c;
+            temp[1] = '\0';
+            push(temp);
+        }
+        else if (isOperator(c)) {
+            pop(b);
+            pop(a);
+
+            sprintf(temp, "%c%s%s", c, a, b);
+            push(temp);
         }
     }
-    pop(&s, out);
+
+    pop(out);
 }
 
-int main(void) {
+int main() {
     int choice;
     char in[MAX], out[MAX];
+
     do {
-        printf("\n1. Infix to postfix\n2. Infix to prefix\n3. Prefix to postfix\n4. Prefix to infix\n5. Postfix to infix\n6. Postfix to prefix\n0. Exit\nChoice: ");
+        printf("\n1. Infix to Postfix");
+        printf("\n2. Infix to Prefix");
+        printf("\n3. Prefix to Postfix");
+        printf("\n4. Prefix to Infix");
+        printf("\n5. Postfix to Infix");
+        printf("\n6. Postfix to Prefix");
+        printf("\n0. Exit");
+        printf("\nEnter choice: ");
         scanf("%d", &choice);
+
         if (choice >= 1 && choice <= 6) {
-            printf("Enter expression without spaces: ");
+            printf("Enter expression: ");
             scanf("%255s", in);
+
             switch (choice) {
-                case 1: infixToPostfix(in, out, 0); break;
-                case 2: infixToPrefix(in, out); break;
-                case 3: prefixToPostfix(in, out); break;
-                case 4: prefixToInfix(in, out); break;
-                case 5: postfixToInfix(in, out); break;
-                case 6: postfixToPrefix(in, out); break;
+                case 1:
+                    infixToPostfix(in, out, 0);
+                    break;
+                case 2:
+                    infixToPrefix(in, out);
+                    break;
+                case 3:
+                    prefixToPostfix(in, out);
+                    break;
+                case 4:
+                    prefixToInfix(in, out);
+                    break;
+                case 5:
+                    postfixToInfix(in, out);
+                    break;
+                case 6:
+                    postfixToPrefix(in, out);
+                    break;
             }
+
             printf("Result: %s\n", out);
-        } else if (choice != 0) printf("Invalid choice.\n");
+        }
+        else if (choice != 0) {
+            printf("Invalid choice!\n");
+        }
+
     } while (choice != 0);
+
     return 0;
 }
